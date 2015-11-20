@@ -1,0 +1,38 @@
+Para que o componente Impactro.Cobranca.DLL funcione dentro do VB6 é necessário:
+(TODOS OS COMANDOS ABAIXO PRECISAM SER EXECUTADOS COMO ADMINISTRADOR VIA PROMPT DE COMANDO: CMD.EXE)
+
+
+1) Registrar o arquivo "impactro.cobranca.dll" com o programa REGASM.EXE
+
+ATENÇÃO: 
+ + Não é necessário copiar a DLL para a pasta "C:\Windows\System32"
+ + O VB6 é 32bit, então não execute o REGASM.EXE da versão 64bits existente na pasta Framework64
+ + A versão comum do impactro.cobranca.dll é compilada com .Net 2.0 assim use o REGASM.EXE da .Net versão 2.0
+ + Caso haja problemas e conflitos desregistre todas as DLL dos devidos locais com o parametro /u
+   Veja mais: https://msdn.microsoft.com/pt-br/library/tzat5yw6(v=vs.80).aspx
+ + O arquivo TLB, só é necessário no ambiente de desenvolvimento assim use o parametro /TLB
+
+a) Escolha um local onde irá ficar a DLL sempre, assim se precisar substituir a versão basta trocar a DLL
+b) Registre a DLL como comando:
+   "C:\Windows\Microsoft.NET\Framework\v2.0.50727\RegAsm.exe" /TLB impactro.cobranca.dll
+*) Caso precise resregistrar use /unregister 
+   "C:\Windows\Microsoft.NET\Framework\v2.0.50727\RegAsm.exe" /unregister impactro.cobranca.dll
+
+
+2) Para executar e depurar o código dentro do VB6 as DLL precisam estar no diretório do VB6
+
+ATENÇÃO:
+ + Esta etapa é opcional, mas ajuda principalmente no ambiente de desenvolvimento
+ + Sem essa etapa pode ser necessário copiar a DLL dentro da pasta do executável do VB6 
+   "C:\Program Files (x86)\Microsoft Visual Studio\VB98"
+
+O 'GACUTIL' disponivel no SDK do .Net (geralment eem C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin) 
+É util para deixar a DLL em cache de forma mais otimizada, não sendo necessário ter a DLL fisica em um certo local.
+   "%ProgramFiles(x86)%\Microsoft SDKs\Windows\v7.0A\Bin\gacutil.exe" /i Impactro.Cobranca.dll
+*) Para desregistrar informe /u mas sem colocar o final .dll de qualquer diretório
+   "%ProgramFiles(x86)%\Microsoft SDKs\Windows\v7.0A\Bin\gacutil.exe" /u Impactro.Cobranca
+
+3) Sem o registro da DLL, ou a insersão no CACHE do .Net é necessário que a DLL esteja no mesmo diretório da executavel
+Os arquivos "Reg.bat" e "UnReg.bat" foram descontinuados pois com .bat as vezes executa de outras pastas gerando erros
+
+4) Com a DLL em cache é preciso primeiro resregistra-la antes de registrar uma nova versão
