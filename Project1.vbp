@@ -1,5 +1,4 @@
 Type=Exe
-Reference=*\G{49578A1E-E65B-4F50-A244-8CED0C0C5F88}#2.f#0#Install-DLL\impactro.cobranca.tlb#BoletoNet-Layouts 6.15
 Form=Form1.frm
 Form=Form3.frm
 Form=Form4.frm

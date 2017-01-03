@@ -65,11 +65,11 @@ ced.CNPJ = "12123123000101"
 'ced.useSantander = true 'importante para gerar o código de barras correto (por questão de compatibilidade o padrão é false)
 
 ' BRADESCO
-ced.Banco = "237-2"
-ced.Agencia = "1510"
-ced.Conta = "001466-4"
-ced.Carteira = "09"
-ced.CedenteCOD = "00000000000001111111" ' 20 digitos
+'ced.Banco = "237-2"
+'ced.Agencia = "1510"
+'ced.Conta = "001466-4"
+'ced.Carteira = "09"
+'ced.CedenteCOD = "00000000000001111111" ' 20 digitos
 
 ' ITAU
 'ced.Banco = "341-1"
@@ -78,13 +78,13 @@ ced.CedenteCOD = "00000000000001111111" ' 20 digitos
 'ced.Carteira = "109"
 
 ' CAIXA (do exemplocaixa.aspx)
-'ced.Banco = "104"
-'ced.Agencia = "123-4"
-'ced.Conta = "5678-9"
-'ced.Carteira = "2"          ' Código da Carteira
-'ced.Convenio = "02"         ' CNPJ do PV da conta do cliente
-'ced.CodCedente = "455932"   ' Código do Cliente(cedente)
-'ced.Modalidade = "14"       ' G069 - CC = 14 (título Registrado emissão Cedente)
+ced.Banco = "104"
+ced.Agencia = "123-4"
+ced.Conta = "5678-9"
+ced.Carteira = "2"          ' Código da Carteira
+ced.Convenio = "02"         ' CNPJ do PV da conta do cliente
+ced.CodCedente = "455932"   ' Código do Cliente(cedente)
+ced.Modalidade = "14"       ' G069 - CC = 14 (título Registrado emissão Cedente)
 
 Dim sac As New SacadoInfo
 sac.Sacado = "Tesde do sacado"
@@ -96,7 +96,7 @@ sac.UF = "SP"
 
 Dim ret As New LayoutBancos
 ret.Init ced
-ret.ShowDumpLine = True 'Exibe informações de posição / valor
+'ret.ShowDumpLine = True 'Exibe informações de posição / valor
 
 ret.Lote = 123
 
@@ -107,6 +107,17 @@ For n = 1 To 5
     bol.ValorDocumento = 1000 + n * 31
     bol.DataDocumento = Now
     bol.DataVencimento = Now
+    bol.DiasBaixa = 5 'Na caixa existem calculos espe
+    
+    
+    'Se por qualquer motivo os campos calculados internamente na DLL C#.Net não estiverem de acordo é possivel redefinir qualquer um deles com o metodo "SetRegKeyValue"
+    'Note que o uso dos enumeradores devem ser por string igual ao escrito em C# e nunca por valor pois o VB6 não interpreta enumeradoro valor como objetos (que são so com "_"): bol.SetRegEnumValue CNAB240SegmentoPCaixa_Juros, 1 => Isso tá errado, não funciona no VB6
+    bol.SetRegKeyValue "CNAB240SegmentoPCaixa.Juros", 1                       ' 118"
+    bol.SetRegKeyValue "CNAB240SegmentoPCaixa.JurosData", CDate("20/01/2017") ' 119-126
+    bol.SetRegKeyValue "CNAB240SegmentoPCaixa.JurosMora", 0.26                ' 127-141"
+    bol.SetRegKeyValue "CNAB240SegmentoPCaixa.ProtestoPrazo", 15              ' 222-223
+    'Este exemplo funciona da mesma forma que o teste unitário em C#: https://github.com/impactro/Boleto-Test/blob/master/Caixa.cs#L48
+    
     
     ret.Add bol, sac
     
